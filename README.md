@@ -9,8 +9,6 @@
 
 The kind of panel layout you get in VS Code, Photoshop, or Blender. You describe the layout as a nested split tree; the library positions the DOM containers, handles resizing, and runs drag-to-dock. It renders almost nothing of its own (a bare tab bar, and only when a region holds 2+ panels) and ships zero visual styling — you bring the panel content and the CSS.
 
-<script async src="//jsfiddle.net/andrevenancio/4cbsfmzj/4/embed/result/dark/"></script>
-
 ## Features
 
 - **Headless** — structural CSS only (flex, sizing, cursors). No theme imposed.
