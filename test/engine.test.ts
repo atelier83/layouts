@@ -4,7 +4,10 @@ import type { LayoutConfig } from "../src/core/config";
 import { createLayout, type LayoutEngine } from "../src/core/engine";
 
 const config: LayoutConfig = {
-  group: [{ id: "b", title: "B" }, { id: "c", title: "C" }],
+  group: [
+    { id: "b", title: "B" },
+    { id: "c", title: "C" },
+  ],
 };
 
 let host: HTMLElement;
@@ -51,7 +54,8 @@ describe("engine", () => {
   it("swaps the tree on setLayout", () => {
     engine.mount(host);
     engine.setLayout({ id: "solo", title: "Solo" });
-    const root = engine.getSnapshot().tree.nodes[engine.getSnapshot().tree.root];
+    const root =
+      engine.getSnapshot().tree.nodes[engine.getSnapshot().tree.root];
     expect(root?.type).toBe("group");
     expect(host.querySelector('[data-panel="solo"]')).not.toBeNull();
   });

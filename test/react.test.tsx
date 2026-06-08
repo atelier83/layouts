@@ -11,7 +11,7 @@ const tabs = {
     { id: "b", title: "B" },
     { id: "c", title: "C" },
   ],
-} as const;
+};
 
 describe("React bindings", () => {
   it("portals panel content into the active region", () => {

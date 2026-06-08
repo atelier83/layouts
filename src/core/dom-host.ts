@@ -92,7 +92,10 @@ export function renderTree(
     if (tabbed) {
       content.id = `${node.id}__panel`;
       content.setAttribute("role", "tabpanel");
-      content.setAttribute("aria-labelledby", `${node.id}__tab__${node.activeTab}`);
+      content.setAttribute(
+        "aria-labelledby",
+        `${node.id}__tab__${node.activeTab}`,
+      );
     }
     if (node.activeTab) content.appendChild(getPanelElement(node.activeTab));
     groupEl.appendChild(content);
@@ -130,7 +133,11 @@ export function renderTree(
           left?.size != null ? left : right?.size != null ? right : null;
         const value =
           active && sized
-            ? { now: Math.round(sized.size!), min: sized.min ?? 24, max: sized.max }
+            ? {
+                now: Math.round(sized.size!),
+                min: sized.min ?? 24,
+                max: sized.max,
+              }
             : undefined;
         splitEl.appendChild(
           makeDivider(
@@ -186,7 +193,8 @@ function makeDivider(
     if (value) {
       divider.setAttribute("aria-valuenow", String(value.now));
       divider.setAttribute("aria-valuemin", String(value.min));
-      if (value.max != null) divider.setAttribute("aria-valuemax", String(value.max));
+      if (value.max != null)
+        divider.setAttribute("aria-valuemax", String(value.max));
     }
   } else {
     divider.style.pointerEvents = "none";

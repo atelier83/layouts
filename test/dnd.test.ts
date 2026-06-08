@@ -42,7 +42,12 @@ describe("zoneAt", () => {
 
 describe("zoneRect", () => {
   it("middle covers the whole rect", () => {
-    expect(zoneRect(r, "middle")).toEqual({ left: 0, top: 0, width: 100, height: 100 });
+    expect(zoneRect(r, "middle")).toEqual({
+      left: 0,
+      top: 0,
+      width: 100,
+      height: 100,
+    });
   });
 
   it("left/right strips hug their edges", () => {

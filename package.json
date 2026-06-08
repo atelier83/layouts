@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Headless dockable panel layouts: split tree, tabs, resize, drag-to-dock. Vanilla TS core with optional React bindings.",
   "license": "MIT",
-  "author": "Andre Venancio",
+  "author": "atelier83",
   "homepage": "https://github.com/atelier83/layouts#readme",
   "repository": {
     "type": "git",
@@ -46,7 +46,8 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && cp src/theme.css dist/theme.css",
+    "build": "tsc -p tsconfig.build.json && cp src/theme.css dist/theme.css",
+    "build:demo": "vite build",
     "check-types": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

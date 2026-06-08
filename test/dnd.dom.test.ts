@@ -48,7 +48,12 @@ function countSplits(): number {
 // jsdom lacks PointerEvent; a MouseEvent of the same type reaches the listeners.
 function pointer(type: string, target: EventTarget, x: number, y: number) {
   target.dispatchEvent(
-    new MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+    new MouseEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      clientX: x,
+      clientY: y,
+    }),
   );
 }
 
@@ -109,12 +114,31 @@ describe("drag to dock", () => {
     expect(groupOf("x")?.tabs).toEqual(["x"]);
   });
 
-  it("drops onto an edge to create a split", () => {
+  it("drops onto a side edge to dock beside as a separate region", () => {
     mount(twoGroups);
     const before = countSplits();
     dragTabInto("a", 320, 100); // left strip of the target rect
+    // The row already lays out horizontally, so a joins as a flat sibling
+    // before b — no redundant nested split.
+    expect(countSplits()).toBe(before);
+    expect(groupOf("a")?.tabs).toEqual(["a"]);
+    expect(groupOf("b")?.tabs).toEqual(["b", "c"]);
+    const root = engine.getSnapshot().tree.nodes[
+      engine.getSnapshot().tree.root
+    ] as SplitNode;
+    const order = root.children.map(
+      (id) => (engine.getSnapshot().tree.nodes[id] as GroupNode).tabs,
+    );
+    expect(order).toEqual([["x"], ["a"], ["b", "c"]]);
+  });
+
+  it("drops onto a perpendicular edge to create a split", () => {
+    mount(twoGroups);
+    const before = countSplits();
+    dragTabInto("a", 400, 180); // bottom strip of the target rect
     expect(countSplits()).toBe(before + 1);
-    expect(groupOf("a")).not.toEqual(groupOf("b"));
+    expect(groupOf("a")?.tabs).toEqual(["a"]);
+    expect(groupOf("b")?.tabs).toEqual(["b", "c"]);
   });
 });
 
@@ -147,7 +171,10 @@ describe("hold to drag", () => {
 
 describe("pointer interactions", () => {
   it("resizes a split by dragging the divider", () => {
-    mount({ direction: "row", children: [{ id: "a", size: 200 }, { id: "b" }] });
+    mount({
+      direction: "row",
+      children: [{ id: "a", size: 200 }, { id: "b" }],
+    });
     const divider = host.querySelector<HTMLElement>(
       ".layouts-divider[data-active]",
     )!;
@@ -159,7 +186,9 @@ describe("pointer interactions", () => {
 
   it("activates a tab on a click without drag", () => {
     mount({ group: [{ id: "b" }, { id: "c" }] });
-    const tabC = host.querySelector<HTMLElement>('[role="tab"][data-panel="c"]')!;
+    const tabC = host.querySelector<HTMLElement>(
+      '[role="tab"][data-panel="c"]',
+    )!;
     pointer("pointerdown", tabC, 10, 10);
     pointer("pointerup", document, 10, 10);
     const root = engine.getSnapshot().tree.root;
@@ -171,7 +200,9 @@ describe("pointer interactions", () => {
 describe("keyboard interactions", () => {
   it("moves between tabs with arrow keys and follows focus", () => {
     mount({ group: [{ id: "b" }, { id: "c" }] });
-    const tabB = host.querySelector<HTMLElement>('[role="tab"][data-panel="b"]')!;
+    const tabB = host.querySelector<HTMLElement>(
+      '[role="tab"][data-panel="b"]',
+    )!;
     tabB.focus();
     key(tabB, "ArrowRight");
 
@@ -183,9 +214,13 @@ describe("keyboard interactions", () => {
 
   it("wraps from the last tab to the first", () => {
     mount({ group: [{ id: "b" }, { id: "c" }] });
-    const tabC = host.querySelector<HTMLElement>('[role="tab"][data-panel="c"]');
+    const tabC = host.querySelector<HTMLElement>(
+      '[role="tab"][data-panel="c"]',
+    );
     // c isn't active yet, so activate it first via End.
-    const tabB = host.querySelector<HTMLElement>('[role="tab"][data-panel="b"]')!;
+    const tabB = host.querySelector<HTMLElement>(
+      '[role="tab"][data-panel="b"]',
+    )!;
     tabB.focus();
     key(tabB, "End");
     expect((document.activeElement as HTMLElement)?.dataset.panel).toBe("c");
@@ -196,7 +231,10 @@ describe("keyboard interactions", () => {
   });
 
   it("resizes a split with arrow keys on the divider", () => {
-    mount({ direction: "row", children: [{ id: "a", size: 200 }, { id: "b" }] });
+    mount({
+      direction: "row",
+      children: [{ id: "a", size: 200 }, { id: "b" }],
+    });
     const divider = host.querySelector<HTMLElement>(
       ".layouts-divider[data-active]",
     )!;

@@ -80,7 +80,10 @@ describe("resize", () => {
 
 describe("setActiveTab", () => {
   it("activates an existing tab", () => {
-    const tree = fromConfig({ group: [{ id: "a" }, { id: "b" }], active: "a" }).tree;
+    const tree = fromConfig({
+      group: [{ id: "a" }, { id: "b" }],
+      active: "a",
+    }).tree;
     const g = groupOf(tree, "a");
     const next = setActiveTab(tree, g.id, "b");
     expect((next.nodes[g.id] as GroupNode).activeTab).toBe("b");
@@ -145,13 +148,54 @@ describe("attach", () => {
     expect(groupOf(next, "a").size).toBe(150);
   });
 
-  it("always sizes the dragged panel even when it started flexible", () => {
+  it("sizes the dragged panel when wrapping a target in a new split", () => {
     const tree = fromConfig({
       direction: "row",
       children: [{ id: "a" }, { id: "b", size: 200, min: 100, max: 400 }],
     }).tree;
-    const next = attach(tree, "a", groupOf(tree, "b").id, "left");
+    // Perpendicular dock builds a new (column) split; `a` started flexible but
+    // must land sized so the new divider has something to push against.
+    const next = attach(tree, "a", groupOf(tree, "b").id, "bottom");
     expect(typeof groupOf(next, "a").size).toBe("number");
+  });
+
+  it("reorders same-orientation neighbours without resizing or nesting them", () => {
+    const tree = fromConfig({
+      direction: "row",
+      children: [
+        { id: "a", size: 300, min: 200, max: 400 },
+        { id: "b", size: 300, min: 200, max: 400 },
+      ],
+    }).tree;
+    // Drag b in front of a: a plain reorder within the existing row split.
+    const next = attach(tree, "b", groupOf(tree, "a").id, "left");
+    const s = rootSplit(next);
+    // Stays one flat split of two groups (no new nesting).
+    expect(s.children).toHaveLength(2);
+    expect(child(next, s, 0).tabs).toEqual(["b"]);
+    expect(child(next, s, 1).tabs).toEqual(["a"]);
+    // Both panels keep their own footprint and clamps untouched.
+    for (const id of ["a", "b"]) {
+      const g = groupOf(next, id);
+      expect(g.size).toBe(300);
+      expect(g.min).toBe(200);
+      expect(g.max).toBe(400);
+    }
+  });
+
+  it("halves a region's footprint when tearing a tab out beside itself", () => {
+    const tree = fromConfig({
+      direction: "row",
+      children: [
+        { group: [{ id: "a" }, { id: "b" }], size: 300 },
+        { id: "c", size: 100 },
+      ],
+    }).tree;
+    const next = attach(tree, "a", groupOf(tree, "a").id, "left");
+    // a and b now sit side-by-side, together still occupying the old 300px.
+    expect(groupOf(next, "a").size).toBe(150);
+    expect(groupOf(next, "b").size).toBe(150);
+    expect(groupOf(next, "c").size).toBe(100);
   });
 });
 

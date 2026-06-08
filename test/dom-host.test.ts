@@ -7,7 +7,12 @@ const config: LayoutConfig = {
   direction: "row",
   children: [
     { id: "a", title: "A", size: 200 },
-    { group: [{ id: "b", title: "B" }, { id: "c", title: "C" }] },
+    {
+      group: [
+        { id: "b", title: "B" },
+        { id: "c", title: "C" },
+      ],
+    },
   ],
 };
 
@@ -70,6 +75,8 @@ describe("renderTree", () => {
 
   it("mounts a content element for the active panels", () => {
     expect(host.querySelector('[data-panel="a"]')).not.toBeNull();
-    expect(host.querySelector('.layouts-panel-content[data-panel="b"]')).not.toBeNull();
+    expect(
+      host.querySelector('.layouts-panel-content[data-panel="b"]'),
+    ).not.toBeNull();
   });
 });

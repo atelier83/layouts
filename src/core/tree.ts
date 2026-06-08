@@ -135,16 +135,56 @@ export function attach(
   if (!source || target?.type !== "group") return tree;
   if (source.id === targetGroupId && source.tabs.length === 1) return tree;
 
+  const orientation: Orientation =
+    side === "left" || side === "right" ? "row" : "column";
+  const before = side === "left" || side === "top";
+
   const nodes: Record<NodeId, LayoutNode> = { ...tree.nodes };
   let root = tree.root;
 
   nodes[source.id] = withoutPanel(source, panelId);
 
-  // The dragged panel must land sized: a split of two flexible children leaves
-  // the divider nothing to push against. Prefer its own footprint, else borrow
-  // half the target (also halves when splitting its own region, so the leftover
-  // panel survives).
+  const parent = findParentSplit(tree, target.id);
   const sameGroup = source.id === targetGroupId;
+
+  // Docking against a neighbour that already lays out along this axis is a
+  // reorder, not a new nesting: drop the panel in as a flat sibling so every
+  // panel keeps its own size/min/max. (Tearing a tab out of its own region
+  // splits that region's footprint in two, so the layout doesn't suddenly grow.)
+  if (parent && parent.orientation === orientation) {
+    let draggedSize = source.size;
+    if (sameGroup && source.size != null) {
+      const half = Math.round(source.size / 2);
+      draggedSize = half;
+      nodes[source.id] = {
+        ...(nodes[source.id] as GroupNode),
+        size: source.size - half,
+      };
+    }
+
+    const dragged: GroupNode = {
+      id: uid("group"),
+      type: "group",
+      tabs: [panelId],
+      activeTab: panelId,
+      size: draggedSize,
+      min: source.min,
+      max: source.max,
+    };
+    nodes[dragged.id] = dragged;
+
+    const children = [...parent.children];
+    const at = children.indexOf(target.id);
+    children.splice(before ? at : at + 1, 0, dragged.id);
+    nodes[parent.id] = { ...parent, children };
+
+    return prune({ root, nodes });
+  }
+
+  // Otherwise wrap the target in a new split along the perpendicular axis. The
+  // dragged panel must land sized — a split of two flexible children leaves the
+  // divider nothing to push against — so the target turns flexible to absorb the
+  // remainder while the dragged panel keeps (or borrows) a concrete footprint.
   const halfTarget = target.size != null ? Math.round(target.size / 2) : null;
   const draggedSize = sameGroup
     ? (halfTarget ?? DEFAULT_PANEL_PX)
@@ -161,9 +201,6 @@ export function attach(
   };
   nodes[dragged.id] = dragged;
 
-  const orientation: Orientation =
-    side === "left" || side === "right" ? "row" : "column";
-  const before = side === "left" || side === "top";
   const split: SplitNode = {
     id: uid("split"),
     type: "split",
@@ -184,7 +221,6 @@ export function attach(
     max: undefined,
   };
 
-  const parent = findParentSplit(tree, target.id);
   if (parent) {
     nodes[parent.id] = {
       ...parent,
