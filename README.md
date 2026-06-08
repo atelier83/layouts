@@ -9,9 +9,7 @@
 
 The kind of panel layout you get in VS Code, Photoshop, or Blender. You describe the layout as a nested split tree; the library positions the DOM containers, handles resizing, and runs drag-to-dock. It renders almost nothing of its own (a bare tab bar, and only when a region holds 2+ panels) and ships zero visual styling — you bring the panel content and the CSS.
 
-<!-- Live demo: add the hosted demo URL here once it's up. Run it locally with `pnpm dev`. -->
-<!-- Add a short screen recording of drag-to-dock here, e.g.:
-![Dragging a panel between regions to dock it](docs/demo.gif) -->
+<script async src="//jsfiddle.net/andrevenancio/4cbsfmzj/4/embed/result/dark/"></script>
 
 ## Features
 
