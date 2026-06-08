@@ -1,0 +1,142 @@
+/* layouts default theme. Reskin by overriding the --layouts-* tokens. */
+
+/* Light (default). */
+.layouts-root {
+  --layouts-divider-size: 4px;
+  --layouts-divider-color: #e4e4e7;
+  --layouts-divider-color-active: #c4c4cc;
+
+  --layouts-tabbar-bg: #f4f4f5;
+  --layouts-tabbar-border: #e4e4e7;
+
+  --layouts-tab-fg: #71717a;
+  --layouts-tab-fg-active: #18181b;
+  --layouts-tab-bg-active: #ffffff;
+  --layouts-tab-border: #e4e4e7;
+  --layouts-tab-padding: 5px 14px;
+  --layouts-tab-font-size: 12px;
+
+  --layouts-drag-outline: rgba(0, 0, 0, 0.35);
+  --layouts-drop-bg: rgba(0, 0, 0, 0.03);
+  --layouts-drop-border: rgba(0, 0, 0, 0.25);
+  --layouts-drop-accent: rgba(37, 99, 235, 0.55);
+  --layouts-focus-ring: #2563eb;
+
+  --layouts-radius: 2px;
+}
+
+/* Dark, following the OS. */
+@media (prefers-color-scheme: dark) {
+  .layouts-root {
+    --layouts-divider-color: #2d2d2d;
+    --layouts-divider-color-active: #3d3d3d;
+
+    --layouts-tabbar-bg: #252526;
+    --layouts-tabbar-border: #2d2d2d;
+
+    --layouts-tab-fg: #888;
+    --layouts-tab-fg-active: #ddd;
+    --layouts-tab-bg-active: #1e1e1e;
+    --layouts-tab-border: #2d2d2d;
+
+    --layouts-drag-outline: rgba(255, 255, 255, 0.5);
+    --layouts-drop-bg: rgba(255, 255, 255, 0.03);
+    --layouts-drop-border: rgba(255, 255, 255, 0.3);
+    --layouts-drop-accent: rgba(96, 165, 250, 0.6);
+    --layouts-focus-ring: #60a5fa;
+  }
+}
+
+/* Forced light: data-theme on the root or any ancestor wins over the OS. */
+[data-theme="light"] .layouts-root,
+.layouts-root[data-theme="light"] {
+  --layouts-divider-color: #e4e4e7;
+  --layouts-divider-color-active: #c4c4cc;
+
+  --layouts-tabbar-bg: #f4f4f5;
+  --layouts-tabbar-border: #e4e4e7;
+
+  --layouts-tab-fg: #71717a;
+  --layouts-tab-fg-active: #18181b;
+  --layouts-tab-bg-active: #ffffff;
+  --layouts-tab-border: #e4e4e7;
+
+  --layouts-drag-outline: rgba(0, 0, 0, 0.35);
+  --layouts-drop-bg: rgba(0, 0, 0, 0.03);
+  --layouts-drop-border: rgba(0, 0, 0, 0.25);
+  --layouts-drop-accent: rgba(37, 99, 235, 0.55);
+}
+
+/* Forced dark. */
+[data-theme="dark"] .layouts-root,
+.layouts-root[data-theme="dark"] {
+  --layouts-divider-color: #2d2d2d;
+  --layouts-divider-color-active: #3d3d3d;
+
+  --layouts-tabbar-bg: #252526;
+  --layouts-tabbar-border: #2d2d2d;
+
+  --layouts-tab-fg: #888;
+  --layouts-tab-fg-active: #ddd;
+  --layouts-tab-bg-active: #1e1e1e;
+  --layouts-tab-border: #2d2d2d;
+
+  --layouts-drag-outline: rgba(255, 255, 255, 0.5);
+  --layouts-drop-bg: rgba(255, 255, 255, 0.03);
+  --layouts-drop-border: rgba(255, 255, 255, 0.3);
+  --layouts-drop-accent: rgba(96, 165, 250, 0.6);
+}
+
+.layouts-divider {
+  background: var(--layouts-divider-color);
+  transition: background 120ms ease;
+}
+.layouts-divider[data-active]:hover {
+  background: var(--layouts-divider-color-active);
+}
+
+.layouts-tab:focus-visible,
+.layouts-divider[data-active]:focus-visible {
+  outline: 2px solid var(--layouts-focus-ring, #2563eb);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layouts-divider {
+    transition: none;
+  }
+}
+
+.layouts-tabbar {
+  background: var(--layouts-tabbar-bg);
+  border-bottom: 1px solid var(--layouts-tabbar-border);
+}
+.layouts-tab {
+  padding: var(--layouts-tab-padding);
+  font: inherit;
+  font-size: var(--layouts-tab-font-size);
+  color: var(--layouts-tab-fg);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--layouts-tab-border);
+  cursor: pointer;
+}
+.layouts-tab[data-state="active"] {
+  color: var(--layouts-tab-fg-active);
+  background: var(--layouts-tab-bg-active);
+}
+
+.layouts-group[data-dragging] {
+  outline: 1px solid var(--layouts-drag-outline);
+  outline-offset: -1px;
+}
+
+.layouts-drop-overlay {
+  background: var(--layouts-drop-bg);
+  border: 1px dashed var(--layouts-drop-border);
+  border-radius: var(--layouts-radius);
+}
+.layouts-drop-overlay[data-zone="middle"] {
+  border-style: solid;
+  border-color: var(--layouts-drop-accent);
+}
