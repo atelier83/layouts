@@ -9,8 +9,7 @@
 
 The kind of panel layout you get in VS Code, Photoshop, or Blender. You describe the layout as a nested split tree; the library positions the DOM containers, handles resizing, and runs drag-to-dock. It renders almost nothing of its own (a bare tab bar, and only when a region holds 2+ panels) and ships zero visual styling — you bring the panel content and the CSS.
 
-**[▶ Try the live playground](https://atelier83.github.io/layouts/)**
-
+<!-- Live demo: add the hosted demo URL here once it's up. Run it locally with `pnpm dev`. -->
 <!-- Add a short screen recording of drag-to-dock here, e.g.:
 ![Dragging a panel between regions to dock it](docs/demo.gif) -->
 
@@ -345,15 +344,16 @@ It's a good fit when you want full control of the look, a vanilla core you can w
 ## Development
 
 ```bash
-npm install
-npm run dev          # live playground (the playground/ page) at http://localhost:5173
-npm test             # run the test suite once
-npm run test:watch   # watch mode
-npm run check-types  # type-check without emitting
-npm run build        # build the library to dist/
+pnpm install
+pnpm dev          # live playground (the playground/ page) at http://localhost:5173
+pnpm test         # run the test suite once
+pnpm test:watch   # watch mode
+pnpm check-types  # type-check without emitting
+pnpm build        # build the library to dist/
+pnpm build:demo   # bundle the playground into demo-dist/ for hosting
 ```
 
-The `playground/` page imports the library source directly and is the same app deployed to GitHub Pages (the "live playground" link above).
+The `playground/` page imports the library source directly. `pnpm build:demo` bundles it into `demo-dist/`, which you can deploy to any static host.
 
 ## License
 
