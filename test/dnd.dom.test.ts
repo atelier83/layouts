@@ -72,7 +72,7 @@ function sizeOf(id: string): number | undefined {
 }
 
 afterEach(() => {
-  engine.destroy();
+  engine.dispose();
   host.remove();
   document.elementFromPoint = realElementFromPoint;
   vi.useRealTimers();

@@ -174,10 +174,9 @@ function makeDivider(
   divider.dataset.orientation = orientation;
   divider.style.flex = "0 0 auto";
   divider.style.alignSelf = "stretch";
-  // Inline so it works unstyled, but reads a token first so themes can resize it.
-  const thickness = "var(--layouts-divider-size, 4px)";
-  if (orientation === "row") divider.style.width = thickness;
-  else divider.style.height = thickness;
+  // Inline structural thickness so the divider works before any theme loads.
+  if (orientation === "row") divider.style.width = "3px";
+  else divider.style.height = "3px";
 
   if (active) {
     divider.dataset.active = "";

@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  engine.destroy();
+  engine.dispose();
   host.remove();
 });
 
@@ -60,12 +60,12 @@ describe("engine", () => {
     expect(host.querySelector('[data-panel="solo"]')).not.toBeNull();
   });
 
-  it("keeps panel elements across a destroy/remount (StrictMode)", () => {
+  it("keeps panel elements across a dispose/remount (StrictMode)", () => {
     engine.mount(host);
     const el = engine.getPanelElement("b");
     el.dataset.userState = "kept";
 
-    engine.destroy();
+    engine.dispose();
     expect(host.querySelector(".layouts-root")).toBeNull();
 
     engine.mount(host);

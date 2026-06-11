@@ -156,21 +156,29 @@ Opt into a ready-made look:
 import "@atelier83/layouts/theme.css";
 ```
 
-Colours follow the OS. Force a mode with `data-theme="dark"` or `data-theme="light"` on the layout root or any ancestor (e.g. `<html data-theme="dark">`) — handy in React, where the root element is created for you.
+The bundled theme is **dark**. It defines the shared `@atelier83` design tokens (`--a83-*`) and the skin rules that read them — no colours are hard-coded into the rules, and there's no built-in light/dark switching.
 
-Reskin by overriding tokens instead of rules:
+Reskin by overriding the tokens. `@atelier83/layouts` and [`@atelier83/timeline`](https://www.npmjs.com/package/@atelier83/timeline) read the **same** `--a83-*` tokens, so defining them once on a common ancestor (or `:root`) themes both packages together — they share one palette by design:
 
 ```css
-.layouts-root {
-  --layouts-divider-size: 6px;
-  --layouts-divider-color: #ccc;
-  --layouts-tab-fg-active: #fff;
-  --layouts-tab-bg-active: #111;
-  --layouts-highlight: rgba(0, 0, 0, 0.35);
+:root {
+  --a83-bg: #262626;       /* active tab + panel content background */
+  --a83-surface: #323232;  /* tab bar background */
+  --a83-border: #323232;   /* dividers + tab separators */
+  --a83-border-strong: #3d3d3d; /* divider hover */
+  --a83-text: #c8c8c8;     /* active tab label */
+  --a83-text-muted: #8c8c8c; /* inactive tab label */
+  --a83-accent: #e6e6e6;   /* focus ring */
+  --a83-overlay: rgba(255, 255, 255, 0.03); /* drop-target fill */
+  --a83-highlight: rgba(255, 255, 255, 0.5); /* drag outline + drop border */
+  --a83-font: system-ui, sans-serif; /* tab bar font */
+  --a83-radius-sm: 2px;    /* drop overlay corner radius */
 }
 ```
 
-Tokens: `--layouts-divider-size`, `--layouts-divider-color`, `--layouts-divider-color-active`, `--layouts-tabbar-bg`, `--layouts-tabbar-border`, `--layouts-tab-fg`, `--layouts-tab-fg-active`, `--layouts-tab-bg-active`, `--layouts-tab-border`, `--layouts-tab-padding`, `--layouts-tab-font-size`, `--layouts-highlight`, `--layouts-drop-bg`, `--layouts-radius`.
+Tokens: `--a83-bg`, `--a83-surface`, `--a83-border`, `--a83-border-strong`, `--a83-text`, `--a83-text-muted`, `--a83-accent`, `--a83-overlay`, `--a83-highlight`, `--a83-font`, `--a83-radius-sm`.
+
+There are no fallbacks and no mode switching baked in: the rules always read `var(--a83-*)`, and the theme decides the values. **Light/dark/system is your app's job** — redefine the tokens under your own `prefers-color-scheme` media query or `[data-theme]` rules.
 
 ### Option 2: style it yourself
 
@@ -313,7 +321,7 @@ The engine is the source of truth. All mutators return synchronously and notify 
 | `setActiveTab(groupId, panelId)`         | select the active tab in a region                                       |
 | `moveTab(panelId, { groupId, index? })`  | move a panel into a region, optionally at a tab index                   |
 | `attachPanel(panelId, groupId, side)`    | dock a panel beside a region (`"left" \| "right" \| "top" \| "bottom"`) |
-| `destroy()`                              | detach interactions and clear the host (panel elements are kept)        |
+| `dispose()`                              | detach interactions and clear the host (panel elements are kept)        |
 
 ### React (`@atelier83/layouts/react`)
 

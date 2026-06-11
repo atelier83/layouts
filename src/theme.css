@@ -1,95 +1,54 @@
-/* layouts default theme. Reskin by overriding the --layouts-* tokens. */
+/*
+ * @atelier83/layouts default theme — dark.
+ *
+ * Defines the shared @atelier83 design tokens (--a83-*) the library consumes,
+ * then the skin rules that read them. The library carries no colours of its
+ * own; this file (or your app) is the only place values live. Load it for
+ * standalone use:
+ *
+ *   import "@atelier83/layouts/theme.css";
+ *
+ * Using layouts inside an app alongside @atelier83/timeline? The skin rules
+ * below still need to load (layouts is headless and ships no injected CSS), but
+ * you can override the --a83-* tokens once on a common ancestor to recolour
+ * everything. Light/dark/system switching is the app's job: redefine these
+ * tokens under your own media query or [data-theme] rules.
+ */
+:root {
+  /* surfaces + lines */
+  --a83-bg: #262626;
+  --a83-surface: #323232;
+  --a83-border: #323232;
+  --a83-border-strong: #3d3d3d;
 
-/* Light (default). */
-.layouts-root {
-  --layouts-divider-size: 4px;
-  --layouts-divider-color: #e4e4e7;
-  --layouts-divider-color-active: #c4c4cc;
+  /* text */
+  --a83-text: #c8c8c8;
+  --a83-text-muted: #8c8c8c;
 
-  --layouts-tabbar-bg: #f4f4f5;
-  --layouts-tabbar-border: #e4e4e7;
+  /* accent — focus ring, drag highlight */
+  --a83-accent: #e6e6e6;
 
-  --layouts-tab-fg: #71717a;
-  --layouts-tab-fg-active: #18181b;
-  --layouts-tab-bg-active: #ffffff;
-  --layouts-tab-border: #e4e4e7;
-  --layouts-tab-padding: 5px 14px;
-  --layouts-tab-font-size: 12px;
+  /* washes */
+  --a83-overlay: rgba(255, 255, 255, 0.03);
+  --a83-highlight: rgba(255, 255, 255, 0.5);
 
-  --layouts-highlight: rgba(0, 0, 0, 0.35);
-  --layouts-drop-bg: rgba(0, 0, 0, 0.03);
-  --layouts-focus-ring: #2563eb;
+  --a83-font: system-ui, -apple-system, sans-serif;
 
-  --layouts-radius: 2px;
-}
-
-/* Dark, following the OS. */
-@media (prefers-color-scheme: dark) {
-  .layouts-root {
-    --layouts-divider-color: #2d2d2d;
-    --layouts-divider-color-active: #3d3d3d;
-
-    --layouts-tabbar-bg: #252526;
-    --layouts-tabbar-border: #2d2d2d;
-
-    --layouts-tab-fg: #888;
-    --layouts-tab-fg-active: #ddd;
-    --layouts-tab-bg-active: #1e1e1e;
-    --layouts-tab-border: #2d2d2d;
-
-    --layouts-highlight: rgba(255, 255, 255, 0.5);
-    --layouts-drop-bg: rgba(255, 255, 255, 0.03);
-    --layouts-focus-ring: #60a5fa;
-  }
-}
-
-/* Forced light: data-theme on the root or any ancestor wins over the OS. */
-[data-theme="light"] .layouts-root,
-.layouts-root[data-theme="light"] {
-  --layouts-divider-color: #e4e4e7;
-  --layouts-divider-color-active: #c4c4cc;
-
-  --layouts-tabbar-bg: #f4f4f5;
-  --layouts-tabbar-border: #e4e4e7;
-
-  --layouts-tab-fg: #71717a;
-  --layouts-tab-fg-active: #18181b;
-  --layouts-tab-bg-active: #ffffff;
-  --layouts-tab-border: #e4e4e7;
-
-  --layouts-highlight: rgba(0, 0, 0, 0.35);
-  --layouts-drop-bg: rgba(0, 0, 0, 0.03);
-}
-
-/* Forced dark. */
-[data-theme="dark"] .layouts-root,
-.layouts-root[data-theme="dark"] {
-  --layouts-divider-color: #2d2d2d;
-  --layouts-divider-color-active: #3d3d3d;
-
-  --layouts-tabbar-bg: #252526;
-  --layouts-tabbar-border: #2d2d2d;
-
-  --layouts-tab-fg: #888;
-  --layouts-tab-fg-active: #ddd;
-  --layouts-tab-bg-active: #1e1e1e;
-  --layouts-tab-border: #2d2d2d;
-
-  --layouts-highlight: rgba(255, 255, 255, 0.5);
-  --layouts-drop-bg: rgba(255, 255, 255, 0.03);
+  /* radius scale */
+  --a83-radius-sm: 2px;
 }
 
 .layouts-divider {
-  background: var(--layouts-divider-color);
+  background: var(--a83-border);
   transition: background 120ms ease;
 }
 .layouts-divider[data-active]:hover {
-  background: var(--layouts-divider-color-active);
+  background: var(--a83-border-strong);
 }
 
 .layouts-tab:focus-visible,
 .layouts-divider[data-active]:focus-visible {
-  outline: 2px solid var(--layouts-focus-ring, #2563eb);
+  outline: 2px solid var(--a83-accent);
   outline-offset: -2px;
 }
 
@@ -100,31 +59,43 @@
 }
 
 .layouts-tabbar {
-  background: var(--layouts-tabbar-bg);
-  border-bottom: 1px solid var(--layouts-tabbar-border);
+  background: var(--a83-surface);
+  border-bottom: 1px solid var(--a83-border);
+  font-family: var(--a83-font);
 }
 .layouts-tab {
-  padding: var(--layouts-tab-padding);
+  padding: 5px 14px;
   font: inherit;
-  font-size: var(--layouts-tab-font-size);
-  color: var(--layouts-tab-fg);
+  font-size: 12px;
+  color: var(--a83-text-muted);
   background: transparent;
   border: none;
-  border-right: 1px solid var(--layouts-tab-border);
+  border-right: 1px solid var(--a83-border);
   cursor: pointer;
 }
+/* the active tab merges into its panel: box-shadow bleeds 1px below the tab
+   in the bg colour, covering the tabbar's bottom border at that position
+   without any layout shift. box-shadow on a flex child is not clipped by the
+   parent, so it paints correctly over the tabbar border. */
 .layouts-tab[data-state="active"] {
-  color: var(--layouts-tab-fg-active);
-  background: var(--layouts-tab-bg-active);
+  color: var(--a83-text);
+  background: var(--a83-bg);
+  border-right-color: transparent;
+  box-shadow: 0 1px 0 var(--a83-bg);
+}
+/* also hide the separator owned by the tab immediately before the active one,
+   so the active tab has no vertical line on either side */
+.layouts-tab:has(+ .layouts-tab[data-state="active"]) {
+  border-right-color: transparent;
 }
 
 .layouts-group[data-dragging] {
-  outline: 1px dashed var(--layouts-highlight);
+  outline: 1px dashed var(--a83-highlight);
   outline-offset: -1px;
 }
 
 .layouts-drop-overlay {
-  background: var(--layouts-drop-bg);
-  border: 1px dashed var(--layouts-highlight);
-  border-radius: var(--layouts-radius);
+  background: var(--a83-overlay);
+  border: 1px dashed var(--a83-highlight);
+  border-radius: var(--a83-radius-sm);
 }

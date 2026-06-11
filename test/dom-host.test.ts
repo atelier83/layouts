@@ -27,7 +27,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  engine.destroy();
+  engine.dispose();
   host.remove();
 });
 

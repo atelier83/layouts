@@ -35,7 +35,7 @@ export interface LayoutEngine {
   setActiveTab(groupId: NodeId, panelId: string): void;
   moveTab(panelId: string, target: MoveTarget): void;
   attachPanel(panelId: string, targetGroupId: NodeId, side: Side): void;
-  destroy(): void;
+  dispose(): void;
 }
 
 function expand(layout: LayoutConfig): {
@@ -132,7 +132,7 @@ export function createLayout(options: CreateLayoutOptions): LayoutEngine {
     attachPanel(panelId, targetGroupId, side) {
       commit(ops.attach(tree, panelId, targetGroupId, side));
     },
-    destroy() {
+    dispose() {
       detachInteractions?.();
       detachInteractions = null;
       if (root) {

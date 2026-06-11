@@ -39,7 +39,7 @@ export function LayoutProvider({
 
   useEffect(() => {
     if (hostRef.current) engine.mount(hostRef.current);
-    return () => engine.destroy();
+    return () => engine.dispose();
   }, [engine]);
 
   return (
