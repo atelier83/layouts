@@ -3,7 +3,7 @@
 > Headless dockable panel layouts for the web — split trees, tabs, resizing, and drag-to-dock, with zero visual styling.
 
 [![npm](https://img.shields.io/npm/v/@atelier83/layouts.svg)](https://www.npmjs.com/package/@atelier83/layouts)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/@atelier83/layouts.svg)](https://bundlephobia.com/package/@atelier83/layouts)
+[![npm unpacked size](https://img.shields.io/npm/unpacked-size/@atelier83/layouts)](https://socket.dev/npm/package/@atelier83/layouts/overview/0.2.1)
 [![CI](https://github.com/atelier83/layouts/actions/workflows/ci.yml/badge.svg)](https://github.com/atelier83/layouts/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/@atelier83/layouts.svg)](./LICENSE)
 
@@ -162,17 +162,17 @@ Reskin by overriding the tokens. `@atelier83/layouts` and [`@atelier83/timeline`
 
 ```css
 :root {
-  --a83-bg: #262626;       /* active tab + panel content background */
-  --a83-surface: #323232;  /* tab bar background */
-  --a83-border: #323232;   /* dividers + tab separators */
+  --a83-bg: #262626; /* active tab + panel content background */
+  --a83-surface: #323232; /* tab bar background */
+  --a83-border: #323232; /* dividers + tab separators */
   --a83-border-strong: #3d3d3d; /* divider hover */
-  --a83-text: #c8c8c8;     /* active tab label */
+  --a83-text: #c8c8c8; /* active tab label */
   --a83-text-muted: #8c8c8c; /* inactive tab label */
-  --a83-accent: #e6e6e6;   /* focus ring */
+  --a83-accent: #e6e6e6; /* focus ring */
   --a83-overlay: rgba(255, 255, 255, 0.03); /* drop-target fill */
   --a83-highlight: rgba(255, 255, 255, 0.5); /* drag outline + drop border */
   --a83-font: system-ui, sans-serif; /* tab bar font */
-  --a83-radius-sm: 2px;    /* drop overlay corner radius */
+  --a83-radius-sm: 2px; /* drop overlay corner radius */
 }
 ```
 
