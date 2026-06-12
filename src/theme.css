@@ -94,6 +94,11 @@
   outline-offset: -1px;
 }
 
+.layouts-panel-content {
+  background: var(--a83-bg);
+  color: var(--a83-text-muted);
+}
+
 .layouts-drop-overlay {
   background: var(--a83-overlay);
   border: 1px dashed var(--a83-highlight);
