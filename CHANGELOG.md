@@ -1,5 +1,11 @@
 # @atelier83/layouts
 
+## 0.2.1
+
+### Patch Changes
+
+- Add `.layouts-panel-content` skin rules to `theme.css` — background and text colour are now themed out of the box without consumers needing to style the panel area themselves.
+
 ## 0.2.0
 
 ### Minor Changes

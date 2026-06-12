@@ -1,6 +1,6 @@
 {
   "name": "@atelier83/layouts",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Headless dockable panel layouts: split tree, tabs, resize, drag-to-dock. Vanilla TS core with optional React bindings.",
   "license": "MIT",
   "author": "atelier83",
